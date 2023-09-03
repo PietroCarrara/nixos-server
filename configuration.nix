@@ -5,11 +5,14 @@ let
   dns = import (builtins.fetchTarball "https://github.com/kirelagin/dns.nix/archive/master.zip");
   domain = "pbcarrara.com.br";
   ipv4 = "162.248.102.209";
-  mail = "piticarrara@gmail.com";
+  email = "piticarrara@gmail.com";
+
+  stargatePort = 1111;
 in
 {
   imports = [
     ./hardware-configuration.nix
+    ./unstable/gotosocial.nix
   ];
 
   programs = {
@@ -22,6 +25,47 @@ in
     };
   };
 
+  security.acme.acceptTerms = true;
+  security.acme.defaults.email = email;
+  services.nginx = {
+    enable = true;
+    clientMaxBodySize = "40M";
+    recommendedProxySettings = true;
+    recommendedTlsSettings = true;
+    virtualHosts = {
+      "${domain}" = {
+        forceSSL = true;
+        enableACME = true;
+      };
+      "stargate.${domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:${toString stargatePort}";
+          proxyWebsockets = true;
+          extraConfig =
+            "proxy_ssl_server_name on;" +
+            "proxy_pass_header Authorization;"
+          ;
+        };
+      };
+    };
+  };
+
+  services.gotosocial = {
+    enable = true;
+    package = pkgs.callPackage ./pkgs/gotosocial.nix { };
+    setupPostgresqlDB = true;
+    settings = {
+      application-name = "Stargate";
+      host = "stargate.${domain}";
+      port = stargatePort;
+      accounts-registration-open = false;
+      media-description-min-chars = 1;
+      media-description-max-chars = 1500;
+    };
+  };
+
   services.bind = {
     enable = true;
     zones = {
@@ -30,7 +74,7 @@ in
         file = pkgs.writeText "${domain}.zone" (dns.lib.toString domain (with dns.lib.combinators; {
           SOA = {
             nameServer = "dns.${domain}.";
-            adminEmail = mail;
+            adminEmail = email;
             serial = 2023090200;
           };
 
@@ -42,8 +86,9 @@ in
             { address = ipv4; ttl = 60 * 60; }
           ];
 
-          subdomains = {
-            dns = host ipv4 null;
+          subdomains = let self = host ipv4 null; in {
+            dns = self;
+            stargate = self;
           };
         }));
       };
