@@ -2,11 +2,8 @@
 , ...
 }:
 let
-  dns = import (builtins.fetchTarball "https://github.com/kirelagin/dns.nix/archive/master.zip");
   domain = "pbcarrara.com.br";
-  ipv4 = "162.248.102.209";
   email = "piticarrara@gmail.com";
-
   stargatePort = 1111;
 in
 {
@@ -66,41 +63,8 @@ in
     };
   };
 
-  services.bind = {
-    enable = true;
-    zones = {
-      "pbcarrara.com.br" = {
-        master = true;
-        file = pkgs.writeText "${domain}.zone" (dns.lib.toString domain (with dns.lib.combinators; {
-          SOA = {
-            nameServer = "dns.${domain}.";
-            adminEmail = email;
-            serial = 2023090200;
-          };
-
-          NS = [
-            "dns.${domain}."
-          ];
-
-          A = [
-            { address = ipv4; ttl = 60 * 60; }
-          ];
-
-          subdomains = let self = host ipv4 null; in {
-            dns = self;
-            stargate = self;
-          };
-        }));
-      };
-    };
-  };
-
   networking = {
     firewall.enable = false;
-    nameservers = [
-      "8.8.8.8"
-      "4.4.4.4"
-    ];
   };
 
   boot.tmp.cleanOnBoot = true;
