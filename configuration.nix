@@ -5,6 +5,7 @@ let
   domain = "pbcarrara.com.br";
   email = "piticarrara@gmail.com";
   stargatePort = 1111;
+  libraryPort = 2222;
 in
 {
   imports = [
@@ -46,6 +47,18 @@ in
           ;
         };
       };
+      "library.${domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:${toString libraryPort}";
+          proxyWebsockets = true;
+          extraConfig =
+            "proxy_ssl_server_name on;" +
+            "proxy_pass_header Authorization;"
+          ;
+        };
+      };
     };
   };
 
@@ -61,6 +74,12 @@ in
       media-description-min-chars = 1;
       media-description-max-chars = 1500;
     };
+  };
+
+  services.trilium-server = {
+    enable = true;
+    port = libraryPort;
+    instanceName = "The Library";
   };
 
   networking = {
