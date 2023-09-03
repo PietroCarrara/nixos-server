@@ -59,11 +59,6 @@ in
           ;
         };
       };
-      "phanpy.${domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        root = "/var/www/phanpy/dist";
-      };
     };
   };
 
@@ -75,6 +70,11 @@ in
       application-name = "Stargate";
       host = "stargate.${domain}";
       port = stargatePort;
+      instance-expose-peers = true;
+      instance-expose-suspended = true;
+      instance-expose-suspended-web = true;
+      instance-expose-public-timeline = true;
+      instance-inject-mastodon-version = true;
       accounts-registration-open = false;
       media-description-min-chars = 1;
       media-description-max-chars = 1500;
