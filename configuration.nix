@@ -59,6 +59,11 @@ in
           ;
         };
       };
+      "phanpy.${domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        root = "/var/www/phanpy/dist";
+      };
     };
   };
 
