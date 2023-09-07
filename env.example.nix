@@ -1,3 +1,1 @@
-{
-  freshrss-password = "password";
-}
+{ }
