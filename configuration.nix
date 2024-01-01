@@ -5,7 +5,6 @@
 let
   domain = "pbcarrara.com.br";
   email = "piticarrara@gmail.com";
-  gotosocialPort = 1111;
   trilliumPort = 2222;
 
   env = import ./env.nix;
@@ -13,7 +12,6 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    ./unstable/gotosocial.nix
   ];
 
   programs = {
@@ -45,18 +43,6 @@ in
           autoindex_localtime on;
         '';
       };
-      "stargate.${domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString gotosocialPort}";
-          proxyWebsockets = true;
-          extraConfig =
-            "proxy_ssl_server_name on;" +
-            "proxy_pass_header Authorization;"
-          ;
-        };
-      };
       "library.${domain}" = {
         forceSSL = true;
         enableACME = true;
@@ -69,25 +55,6 @@ in
           ;
         };
       };
-    };
-  };
-
-  services.gotosocial = {
-    enable = true;
-    package = pkgs.callPackage ./pkgs/gotosocial.nix { };
-    setupPostgresqlDB = true;
-    settings = {
-      application-name = "Stargate";
-      host = "stargate.${domain}";
-      port = gotosocialPort;
-      instance-expose-peers = true;
-      instance-expose-suspended = true;
-      instance-expose-suspended-web = true;
-      instance-expose-public-timeline = true;
-      instance-inject-mastodon-version = true;
-      accounts-registration-open = false;
-      media-description-min-chars = 1;
-      media-description-max-chars = 1500;
     };
   };
 
