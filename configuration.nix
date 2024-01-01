@@ -37,6 +37,13 @@ in
       "${domain}" = {
         forceSSL = true;
         enableACME = true;
+        root = /root/wwwroot;
+        locations."/".extraConfig = ''
+          autoindex on;
+          autoindex_exact_size off;
+          autoindex_format html;
+          autoindex_localtime on;
+        '';
       };
       "stargate.${domain}" = {
         forceSSL = true;
