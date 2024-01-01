@@ -5,8 +5,8 @@
 let
   domain = "pbcarrara.com.br";
   email = "piticarrara@gmail.com";
-  stargatePort = 1111;
-  libraryPort = 2222;
+  gotosocialPort = 1111;
+  trilliumPort = 2222;
 
   env = import ./env.nix;
 in
@@ -42,7 +42,7 @@ in
         forceSSL = true;
         enableACME = true;
         locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString stargatePort}";
+          proxyPass = "http://127.0.0.1:${toString gotosocialPort}";
           proxyWebsockets = true;
           extraConfig =
             "proxy_ssl_server_name on;" +
@@ -54,7 +54,7 @@ in
         forceSSL = true;
         enableACME = true;
         locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString libraryPort}";
+          proxyPass = "http://127.0.0.1:${toString trilliumPort}";
           proxyWebsockets = true;
           extraConfig =
             "proxy_ssl_server_name on;" +
@@ -72,7 +72,7 @@ in
     settings = {
       application-name = "Stargate";
       host = "stargate.${domain}";
-      port = stargatePort;
+      port = gotosocialPort;
       instance-expose-peers = true;
       instance-expose-suspended = true;
       instance-expose-suspended-web = true;
@@ -86,7 +86,7 @@ in
 
   services.trilium-server = {
     enable = true;
-    port = libraryPort;
+    port = trilliumPort;
     instanceName = "The Library";
   };
 
