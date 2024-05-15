@@ -24,6 +24,10 @@ in
     };
   };
 
+  nixpkgs.config.permittedInsecurePackages = [
+    "openssl-1.1.1w"
+  ];
+
   security.acme.acceptTerms = true;
   security.acme.defaults.email = email;
   services.nginx = {
