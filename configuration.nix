@@ -73,6 +73,7 @@ in
     hostName = "grocy.pbcarrara.com.br";
     settings.currency = "BRL";
     settings.culture = "pt_BR";
+    nginx.enableSSL = true;
   };
 
   networking = {
