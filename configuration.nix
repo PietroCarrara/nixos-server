@@ -74,7 +74,7 @@ in
     settings.currency = "BRL";
     settings.culture = "pt_BR";
     nginx.enableSSL = true;
-    package = assert pkgs.grocy.version = "4.2.0"; pkgs.grocy;
+    package = assert pkgs.grocy.version == "4.2.0"; pkgs.grocy;
   };
 
   networking = {
