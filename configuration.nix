@@ -68,12 +68,14 @@ in
     instanceName = "The Library";
   };
 
+  assert pkgs.grocy.version = "4.2.0";
   services.grocy = {
     enable = true;
     hostName = "grocy.pbcarrara.com.br";
     settings.currency = "BRL";
     settings.culture = "pt_BR";
     nginx.enableSSL = true;
+    package = pkgs.grocy;
   };
 
   networking = {
