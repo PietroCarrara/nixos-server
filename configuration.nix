@@ -39,6 +39,7 @@ in
   security.acme.defaults.email = email;
   services.nginx = {
     enable = true;
+    enableReload = true;
     clientMaxBodySize = "40M";
     recommendedProxySettings = true;
     recommendedTlsSettings = true;
