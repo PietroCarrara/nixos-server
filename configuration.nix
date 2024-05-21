@@ -17,7 +17,7 @@ in
   nix.gc = {
     automatic = true;
     randomizedDelaySec = "14m";
-    options = "--delete-older-than 2d";
+    options = "--delete-older-than 1d";
   };
 
 
@@ -30,10 +30,6 @@ in
       };
     };
   };
-
-  nixpkgs.config.permittedInsecurePackages = [
-    "openssl-1.1.1w"
-  ];
 
   security.acme.acceptTerms = true;
   security.acme.defaults.email = email;
