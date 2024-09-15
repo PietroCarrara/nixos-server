@@ -69,6 +69,7 @@ in
   services.shadowsocks = {
     enable = true;
     password = env.shadowsocks.password;
+    port = 51992;
   };
 
   services.trilium-server = {
