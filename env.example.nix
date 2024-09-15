@@ -1,1 +1,3 @@
-{ }
+{
+  shadowsocks.password = "password";
+}

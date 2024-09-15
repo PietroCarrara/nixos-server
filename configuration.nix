@@ -66,6 +66,11 @@ in
     };
   };
 
+  services.shadowsocks = {
+    enable = true;
+    password = env.shadowsocks.password;
+  };
+
   services.trilium-server = {
     enable = true;
     port = trilliumPort;
