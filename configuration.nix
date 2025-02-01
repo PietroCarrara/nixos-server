@@ -91,14 +91,6 @@ in
     instanceName = "The Library";
   };
 
-  services.grocy = {
-    enable = true;
-    hostName = "grocy.pbcarrara.com.br";
-    settings.currency = "BRL";
-    settings.culture = "pt_BR";
-    nginx.enableSSL = true;
-  };
-
   services.adguardhome = {
     enable = true;
     port = adguardPort;
