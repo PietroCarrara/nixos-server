@@ -6,6 +6,7 @@ let
   domain = "pbcarrara.com.br";
   email = "piticarrara@gmail.com";
   trilliumPort = 2222;
+  adguardPort = 3333;
 
   env = import ./env.nix;
 in
@@ -63,6 +64,18 @@ in
           ;
         };
       };
+      "adguard.${domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:${toString adguardPort}";
+          proxyWebsockets = true;
+          extraConfig =
+            "proxy_ssl_server_name on;" +
+            "proxy_pass_header Authorization;"
+          ;
+        };
+      };
     };
   };
 
@@ -84,6 +97,11 @@ in
     settings.currency = "BRL";
     settings.culture = "pt_BR";
     nginx.enableSSL = true;
+  };
+
+  services.adguardhome = {
+    enable = true;
+    port = adguardPort;
   };
 
   networking = {
