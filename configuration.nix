@@ -4,6 +4,9 @@ let
   email = "piticarrara@gmail.com";
   trilliumPort = 2222;
   adguardPort = 3333;
+  excalidrawPort = 4444;
+  excalidrawRoomPort = 5555;
+  simpleStoragePort = 8090;
 
   env = import ./env.nix;
 in {
@@ -62,6 +65,36 @@ in {
         enableACME = true;
         locations."/" = {
           proxyPass = "http://127.0.0.1:${toString adguardPort}";
+          proxyWebsockets = true;
+          extraConfig = "proxy_ssl_server_name on;"
+            + "proxy_pass_header Authorization;";
+        };
+      };
+      "excalidraw.${domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:${toString excalidrawPort}";
+          proxyWebsockets = true;
+          extraConfig = "proxy_ssl_server_name on;"
+            + "proxy_pass_header Authorization;";
+        };
+      };
+      "excalidraw-room.${domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:${toString excalidrawRoomPort}";
+          proxyWebsockets = true;
+          extraConfig = "proxy_ssl_server_name on;"
+            + "proxy_pass_header Authorization;";
+        };
+      };
+      "simple-storage.${domain}" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:${toString simpleStoragePort}";
           proxyWebsockets = true;
           extraConfig = "proxy_ssl_server_name on;"
             + "proxy_pass_header Authorization;";
