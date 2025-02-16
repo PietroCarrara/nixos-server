@@ -3,7 +3,6 @@ let
   domain = "pbcarrara.com.br";
   email = "piticarrara@gmail.com";
   trilliumPort = 2222;
-  adguardPort = 3333;
   excalidrawPort = 4444;
   excalidrawRoomPort = 5555;
   simpleStoragePort = 8090;
@@ -60,16 +59,6 @@ in {
             + "proxy_pass_header Authorization;";
         };
       };
-      "adguard.${domain}" = {
-        forceSSL = true;
-        enableACME = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString adguardPort}";
-          proxyWebsockets = true;
-          extraConfig = "proxy_ssl_server_name on;"
-            + "proxy_pass_header Authorization;";
-        };
-      };
       "excalidraw.${domain}" = {
         forceSSL = true;
         enableACME = true;
@@ -113,11 +102,6 @@ in {
     enable = true;
     port = trilliumPort;
     instanceName = "The Library";
-  };
-
-  services.adguardhome = {
-    enable = true;
-    port = adguardPort;
   };
 
   networking = { firewall.enable = false; };
