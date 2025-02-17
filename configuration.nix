@@ -37,6 +37,9 @@ in {
     clientMaxBodySize = "40M";
     recommendedProxySettings = true;
     recommendedTlsSettings = true;
+    recommendedGzipSettings = true;
+    recommendedZstdSettings = true;
+    recommendedBrotliSettings = true;
     virtualHosts = {
       "${domain}" = {
         forceSSL = true;
